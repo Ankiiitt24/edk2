@@ -771,6 +771,7 @@
 #
 ################################################################################
 [Components]
+  DxeUsbKeyF/DxeUsbKey.inf
   OvmfPkg/ResetVector/ResetVector.inf
 
   #
@@ -1177,3 +1178,4 @@
 !if $(TPM2_ENABLE) == TRUE || $(CC_MEASUREMENT_ENABLE) == TRUE
   MdeModulePkg/Universal/SmbiosMeasurementDxe/SmbiosMeasurementDxe.inf
 !endif
+
