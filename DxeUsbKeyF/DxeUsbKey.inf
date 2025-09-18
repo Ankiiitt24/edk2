@@ -1,0 +1,50 @@
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = DxeUsbKey
+  FILE_GUID                      = 0a6c48b8-53d8-44b3-9145-308c12b9b7a5
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = DxeUsbEntryPoint
+
+[Sources]
+  DxeUsbKey.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  OvmfPkg/OvmfPkg.dec
+  CryptoPkg/CryptoPkg.dec
+  SecurityPkg/SecurityPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  BaseLib
+  BaseCryptLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  PrintLib
+  UefiRuntimeServicesTableLib
+  DevicePathLib
+  DebugLib
+  RngLib
+  TimerLib
+  Tpm2CommandLib
+
+[Protocols]
+  gEfiUsbIoProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gEfiDevicePathToTextProtocolGuid
+  gEfiRngProtocolGuid
+  gEfiTcg2ProtocolGuid
+
+
+[Depex]
+  gEfiUsbIoProtocolGuid
+  #gEfiTcg2ProtocolGuid
+
+
+[BuildOptions]
+  GCC:*_*_*_LD_FLAGS = -Wl,-z,max-page-size=0x1000 -Wl,--image-base=0x100000
+  CLANG:*_*_*_LD_FLAGS = -Wl,-z,max-page-size=0x1000 -Wl,--image-base=0x100000
