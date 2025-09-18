@@ -149,6 +149,7 @@
 !include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses]
+  Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibDTpm/Tpm2DeviceLibDTpm.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
   SmmRelocationLib|OvmfPkg/Library/SmmRelocationLib/SmmRelocationLib.inf
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
@@ -1179,5 +1180,6 @@
 !if $(TPM2_ENABLE) == TRUE || $(CC_MEASUREMENT_ENABLE) == TRUE
   MdeModulePkg/Universal/SmbiosMeasurementDxe/SmbiosMeasurementDxe.inf
 !endif
+
 
 
