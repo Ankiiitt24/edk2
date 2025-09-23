@@ -16,6 +16,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include "Language.h"
 #include "HwErrRecSupport.h"
 #include <Library/VariablePolicyHelperLib.h>
+#include <Protocol/UsbIo.h>
 
 #define SET_BOOT_OPTION_SUPPORT_KEY_COUNT(a, c)  { \
       (a) = ((a) & ~EFI_BOOT_OPTION_SUPPORT_COUNT) | (((c) << LowBitSet32 (EFI_BOOT_OPTION_SUPPORT_COUNT)) & EFI_BOOT_OPTION_SUPPORT_COUNT); \
@@ -934,6 +935,37 @@ BdsEntry (
   PERF_INMODULE_BEGIN ("PlatformBootManagerAfterConsole");
   PlatformBootManagerAfterConsole ();
   PERF_INMODULE_END ("PlatformBootManagerAfterConsole");
+  
+  // Clear the screen to remove the logo
+  gBS->Stall(3000000);
+  gST->ConOut->ClearScreen(gST->ConOut);
+
+  // USB device detection and shutdown logic (moved here, after USB stack is initialized)
+  {
+    EFI_HANDLE *HandleBuffer = NULL;
+    UINTN HandleCount = 0;
+    EFI_STATUS Status;
+    Status = gBS->LocateHandleBuffer(
+        ByProtocol,
+        &gEfiUsbIoProtocolGuid,
+        NULL,
+        &HandleCount,
+        &HandleBuffer
+    );
+
+    if (EFI_ERROR(Status) || HandleCount == 0) {
+        Print(L"USB device is not detected. Scanning Again.....\n");
+        gBS->Stall(3000000); // 3 seconds
+        Print(L"USB device is not detected. Shutting down the system.\n");
+        gBS->Stall(5000000);
+        gRT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+        // Should not return
+    }
+    if (HandleBuffer) {
+        FreePool(HandleBuffer);
+    }
+  }
+
 
   //
   // If any component set PcdTestKeyUsed to TRUE because use of a test key
