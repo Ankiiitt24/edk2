@@ -957,7 +957,7 @@ BdsEntry (
         Print(L"USB device is not detected. Scanning Again.....\n");
         gBS->Stall(3000000); // 3 seconds
         Print(L"USB device is not detected. Shutting down the system.\n");
-        gBS->Stall(5000000);
+        gBS->Stall(3000000);
         gRT->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
         // Should not return
     }
@@ -1239,3 +1239,4 @@ BdsDxeSetVariableAndReportStatusCodeOnError (
 
   return Status;
 }
+
